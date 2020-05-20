@@ -29,8 +29,7 @@ void startWiFiManagerWithParameters() {
     WiFi.hostname(hostname);
   #endif
   
-  // Won't connect to the WiFi the first time it's powered up
-  // without this line, idk why
+  // I've been told this line is a good idea
   WiFi.mode(WIFI_STA);
   
   // WiFiManager bits and pieces
@@ -53,18 +52,24 @@ void startWiFiManagerWithParameters() {
   
   //reset settings - wipe credentials for testing, if defined
   #if defined(START_ANEW)
-    Serial.println("^^^^^^^^ Clearing WiFi");
+    Serial.println("^^^^^^^^ Clearing WiFi credentials");
     wm.resetSettings();
   #endif
-  
+
+  // Run the routine to connect to the network
   if (!wm.autoConnect(hostname, "password")) {
-    Serial.println("failed to connect and hit timeout");
+
+    // If we've hit the config portal timeout, then retstart
+    
+    Serial.println("%%% Failed to connect and hit timeout, restarting");
     delay(100);
-    // if we still have not connected restart and try all over again
     ESP.restart();
+
+    // Not sure if this line is necessary
     delay(5000);
   }
-  
+
+  // Keeping this line cos it's cute
   Serial.println("Connected ...yeey :)");
   
   // Update parameters from the new values set in the portal
