@@ -26,6 +26,9 @@
 // Uncomment to reset device memory
 //#define START_ANEW
 
+// Which room in the house is this project
+char room[30] = "living_room";
+
 // Include the other sketch files
 #include "settings.h"
 #include "wifi.h"
