@@ -22,6 +22,8 @@ char inTopic[40];
 char willTopic[40];
 char roomStateTopic[40];
 
+long lastMQTTReconnectAttempt = 0;
+
 void mqttCallback(char* topic, byte* payload, unsigned int length) {
 
   Serial.print("!!! Received: ");
@@ -47,7 +49,7 @@ void setupMQTT() {
   mqttClient.setCallback(mqttCallback);
 }
 
-void mqttConnect() {
+boolean mqttConnect() {
 
   Serial.print("=== MQTT connecting to ");
   Serial.print(mqtt_server);
@@ -72,17 +74,34 @@ void mqttConnect() {
 
   }
 
+  // Return true or false
+  return mqttClient.connected();
+
 }
 
-void mqttLoop() {
+void mqttLoop(long now) {
 
   // Maintain connection
   // This is also how we connect for the first time
   if(!mqttClient.connected()) {
-    mqttConnect();
-  }
 
-  // Check for incoming messages
-  mqttClient.loop();
+    // Has it been 5 seconds since we last tried to connect
+    if (now - lastMQTTReconnectAttempt > 5000) {
+  
+      lastMQTTReconnectAttempt = now;
+
+      // If successful, reset the counters
+      if (mqttConnect()) {
+        lastMQTTReconnectAttempt = 0;
+      }
+    }
+
+  } else {
+
+    // We are connected
+    // Check for incoming messages
+    mqttClient.loop();
+    
+  }
 
 }

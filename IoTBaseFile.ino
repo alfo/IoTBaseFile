@@ -62,9 +62,12 @@ void loop() {
 
   long now = millis();
 
+  // Non-blocking MQTT connect/re-connect
+  mqttLoop(now);
+
   // Only check MQTT connection and messages every two seconds
   if (now - lastMsg > 2000) {
-    mqttLoop();
+    
 
     lastMsg = now;
     ++value;
