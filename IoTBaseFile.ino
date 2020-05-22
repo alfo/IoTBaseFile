@@ -17,7 +17,7 @@
  // Include Libraries
 #include <FS.h>            // this needs to be first, or it all crashes and burns...
 #include <WiFiManager.h>   // https://github.com/tzapu/WiFiManager v0.1.5
-#include <ArduinoJson.h>   // https://github.com/bblanchon/ArduinoJson ~v5.x.x
+#include <ArduinoJson.h>   // https://github.com/bblanchon/ArduinoJson ~v6.x.x
 #include <PubSubClient.h>
 #ifdef ESP32
   #include <SPIFFS.h>

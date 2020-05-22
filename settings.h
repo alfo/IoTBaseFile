@@ -58,10 +58,11 @@ void setupStorage(){
         std::unique_ptr<char[]> buf(new char[size]);
 
         configFile.readBytes(buf.get(), size);
-        DynamicJsonBuffer jsonBuffer;
-        JsonObject& json = jsonBuffer.parseObject(buf.get());
-        json.printTo(Serial);
-        if (json.success()) {
+        StaticJsonDocument<256> json;
+        DeserializationError error = deserializeJson(json, buf.get());
+  
+        serializeJsonPretty(json, Serial);
+        if (!error) {
           Serial.println("\nparsed json");
 
           strcpy(hostname, json["hostname"]);
@@ -94,8 +95,8 @@ void setupStorage(){
 
 void saveConfig() {
   Serial.println("saving config");
-  DynamicJsonBuffer jsonBuffer;
-  JsonObject& json = jsonBuffer.createObject();
+  
+  StaticJsonDocument<256> json;
   json["mqtt_server"]    = mqtt_server;
   json["mqtt_port"]      = mqtt_port;
   json["mqtt_username"]  = mqtt_username;
@@ -111,8 +112,9 @@ void saveConfig() {
     Serial.println("failed to open config file for writing");
   }
 
-  json.prettyPrintTo(Serial);
-  json.printTo(configFile);
+  serializeJsonPretty(json, Serial);
+  
+  serializeJson(json, configFile);
   configFile.close();
   //end save
   shouldSaveConfig = false;

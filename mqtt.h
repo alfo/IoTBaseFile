@@ -27,11 +27,11 @@ long lastMQTTReconnectAttempt = 0;
 void mqttCallback(char* topic, byte* payload, unsigned int length) {
 
   // Convert the input bytes into a usable JSON buffer
-  StaticJsonBuffer<256> jsonBuffer;
-  JsonObject& json = jsonBuffer.parseObject(payload, length);
+  StaticJsonDocument<256> json;
+  deserializeJson(json, payload, length);
 
   Serial.print("Receive message:");
-  json.printTo(Serial);
+  serializeJsonPretty(json, Serial);
   Serial.print("\n");
 
   //mqttClient.publish("octodisplay/debug", message);
