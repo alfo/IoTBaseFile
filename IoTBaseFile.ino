@@ -66,7 +66,7 @@ void loop() {
   mqttLoop(now);
 
   // Only check MQTT connection and messages every two seconds
-  if (now - lastMsg > 2000) {
+  if (now - lastMsg > 5000) {
     
 
     lastMsg = now;
