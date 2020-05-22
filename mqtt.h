@@ -11,7 +11,7 @@
  Internet of Things Base Project            |___/
  For ESP8266 / ESP32
  settings.ho
- *
+ *r
  */
 
 WiFiClient wifiClient;
@@ -24,6 +24,11 @@ char roomStateTopic[40];
 
 void mqttCallback(char* topic, byte* payload, unsigned int length) {
 
+  Serial.print("!!! Received: ");
+  Serial.print(topic);
+  Serial.print(" ");
+  Serial.println((const char *)payload);
+  Serial.println();
 
 }
 
