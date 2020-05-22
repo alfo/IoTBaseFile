@@ -67,12 +67,12 @@ void loop() {
 
   // Only check MQTT connection and messages every two seconds
   if (now - lastMsg > 5000) {
-    
 
+    // Create a debug message
     lastMsg = now;
-    ++value;
-    snprintf (msg, 50, "hello world #%ld", value);
+    snprintf (msg, 50, "hello world #%ld", ++value);
 
+    // Send a debug message
     Serial.print("Publish message: ");
     Serial.println(msg);
 
