@@ -36,6 +36,7 @@ char room[30] = "living_room";
 #include "settings.h"
 #include "wifi.h"
 #include "mqtt.h"
+#include "ota.h"
 
 void setup() {
 
@@ -50,7 +51,7 @@ void setup() {
   startWiFiManagerWithParameters();
 
   // Start ArduinoOTA service
-  ArduinoOTA.begin();
+  startOTA();
 
   // Instantiate MQTT
   setupMQTT();

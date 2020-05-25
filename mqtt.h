@@ -10,8 +10,8 @@
                                              __/ |
  Internet of Things Base Project            |___/
  For ESP8266 / ESP32
- settings.ho
- *r
+ settings.h
+ *
  */
 
 WiFiClient wifiClient;
