@@ -19,8 +19,9 @@
 #include <WiFiManager.h>   // https://github.com/tzapu/WiFiManager ~v2.0.0
 #include <ArduinoJson.h>   // https://github.com/bblanchon/ArduinoJson ~v6.x.x
 #include <PubSubClient.h>  // https://github.com/knolleary/pubsubclient ~v2.7.0
-#include <WiFiUdp.h>       // For the below
 #include <ArduinoOTA.h>    // Included with core
+#include <WiFiUdp.h>       // For the below
+
 
 #ifdef ESP32
   #include <SPIFFS.h>
@@ -36,7 +37,6 @@ char room[30] = "living_room";
 #include "settings.h"
 #include "wifi.h"
 #include "mqtt.h"
-#include "ota.h"
 
 void setup() {
 
@@ -51,7 +51,9 @@ void setup() {
   startWiFiManagerWithParameters();
 
   // Start ArduinoOTA service
-  startOTA();
+  // So not just anyone can re-flash our devices
+  ArduinoOTA.setPassword("chvFSEebm9X4GtpY");
+  ArduinoOTA.begin();
 
   // Instantiate MQTT
   setupMQTT();
