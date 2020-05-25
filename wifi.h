@@ -17,9 +17,22 @@
 const unsigned long CONNECT_TIMEOUT = 30; // How long to attempt to connect to saved WiFi before going into AP mode
 const unsigned long AP_TIMEOUT = 60; // Wait 20 Seconds in the config portal before trying again the original WiFi creds
 
+// In case we want to do something when WiFiManager enters configuration mode
+void configModeCallback (WiFiManager *myWiFiManager) {
+  Serial.println("[CALLBACK] configModeCallback fired");
+}
+
+// In case we want to do something when the WiFi settings are saved
+void saveWifiCallback(){
+  Serial.println("[CALLBACK] saveCallback fired");
+}
+
 // To be called once in setup()
 // Just to make the main sketch cleaner
 void startWiFiManagerWithParameters() {
+
+  // I've been told this line is a good idea
+  WiFi.mode(WIFI_STA);
   
   // Set hostname from settings
   // It's particularly dumb that they don't use the same method
@@ -29,14 +42,12 @@ void startWiFiManagerWithParameters() {
     WiFi.hostname(hostname);
   #endif
   
-  // I've been told this line is a good idea
-  WiFi.mode(WIFI_STA);
-  
   // WiFiManager bits and pieces
   WiFiManager wm;
   wm.setSaveConfigCallback(saveConfigCallback);
   wm.setConnectTimeout(CONNECT_TIMEOUT);
   wm.setTimeout(AP_TIMEOUT);
+  wm.setCountry("GB");
   
   // WiFiManager custom config
   WiFiManagerParameter custom_hostname("hostname", "Hostname", hostname, 24);

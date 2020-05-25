@@ -16,9 +16,12 @@
 
  // Include Libraries
 #include <FS.h>            // this needs to be first, or it all crashes and burns...
-#include <WiFiManager.h>   // https://github.com/tzapu/WiFiManager v0.1.5
+#include <WiFiManager.h>   // https://github.com/tzapu/WiFiManager ~v2.0.0
 #include <ArduinoJson.h>   // https://github.com/bblanchon/ArduinoJson ~v6.x.x
-#include <PubSubClient.h>
+#include <PubSubClient.h>  // https://github.com/knolleary/pubsubclient ~v2.7.0
+#include <WiFiUdp.h>       // For the below
+#include <ArduinoOTA.h>    // Included with core
+
 #ifdef ESP32
   #include <SPIFFS.h>
 #endif
@@ -46,6 +49,9 @@ void setup() {
   // Start up WiFi and config parameters etc.
   startWiFiManagerWithParameters();
 
+  // Start ArduinoOTA service
+  ArduinoOTA.begin();
+
   // Instantiate MQTT
   setupMQTT();
 
@@ -60,10 +66,12 @@ char msg[50];
 
 void loop() {
 
+  // All-purpose way to keep track of the time
   long now = millis();
 
-  // Non-blocking MQTT connect/re-connect
-  mqttLoop(now);
+  // Loop our network services
+  mqttLoop(now);          // Non-blocking MQTT connect/re-connect
+  ArduinoOTA.handle();    // In case we want to upload a new sketch
 
   // Only check MQTT connection and messages every two seconds
   if (now - lastMsg > 5000) {

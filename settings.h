@@ -59,10 +59,10 @@ void setupStorage(){
 
         configFile.readBytes(buf.get(), size);
         StaticJsonDocument<256> json;
-        DeserializationError error = deserializeJson(json, buf.get());
+        DeserializationError jsonError = deserializeJson(json, buf.get());
   
         serializeJsonPretty(json, Serial);
-        if (!error) {
+        if (!jsonError) {
           Serial.println("\nparsed json");
 
           strcpy(hostname, json["hostname"]);
