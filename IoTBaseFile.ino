@@ -32,6 +32,7 @@
 
 // Which room in the house is this project
 char room[30] = "living_room";
+int party_mode = 0; // 0 = off, 1 = chill, 2 = party
 
 // Include the other sketch files
 #include "settings.h"

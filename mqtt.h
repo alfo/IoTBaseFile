@@ -34,6 +34,22 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
   serializeJsonPretty(json, Serial);
   Serial.print("\n");
 
+  // Handle room-wide topic messages
+  if (strcmp (topic, roomStateTopic) == 0) {
+
+    if (strcmp (json["party"], "chill") == 0) {
+      Serial.println("^^^ Mode change: Chill party");
+      party_mode = 1;
+    } else if (strcmp (json["party"], "on") == 0) {
+      Serial.println("^^^ Mode change: Normal party");
+      party_mode = 1;
+    } else if (strcmp (json["party"], "off") == 0) {
+      Serial.println("^^^ Mode change: No party");
+      party_mode = 0;
+    }
+    
+  }
+
   //mqttClient.publish("octodisplay/debug", message);
 
 }
